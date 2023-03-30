@@ -2,8 +2,9 @@ import { ImageLinks } from "./ImagesLinks";
 import { IndustryIdentifier } from "./IndustryIdentifier";
 import { PanelizationSummary } from "./PanelizationSummary";
 import { ReadingModes } from "./ReadingModes";
+import Shelf from "./Shelf";
 
-export interface Book {
+export interface IBook {
   title: string;
   subtitle: string;
   authors: string[];
@@ -27,5 +28,5 @@ export interface Book {
   infoLink: string;
   canonicalVolumeLink: string;
   id: string;
-  shelf: string;
+  shelf: Shelf;
 }
