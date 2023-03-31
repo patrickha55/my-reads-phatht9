@@ -1,12 +1,12 @@
 import { IBook } from '../interfaces/IBook';
 import React from 'react';
 import Shelf from '../interfaces/Shelf';
+import '../images/default.png';
 
 const Book: React.FC<{
   book: IBook;
   handleShelfChange: Function;
 }> = ({ book, handleShelfChange }): JSX.Element => {
-
   return (
     <div className='book'>
       <div className='book-top'>
@@ -16,19 +16,21 @@ const Book: React.FC<{
             width: 128,
             height: 193,
             backgroundImage:
-              `url(${book.imageLinks.thumbnail}})`,
+              `url(${book.imageLinks?.thumbnail ? book.imageLinks.thumbnail : `default.png`}})`,
           }}
         ></div>
         <div className='book-shelf-changer'>
-          <select defaultValue={book.shelf} onChange={(e) => handleShelfChange(book, e.target.value)}>
+          <select defaultValue={book.shelf ? book.shelf : Shelf.none} onChange={(e) => handleShelfChange(book, e.target.value)}>
             <option value={Shelf.none} disabled>
               Move to...
             </option>
             {
-              Object.keys(Shelf).map((s, index) => {
-                if (s !== Shelf.none) {
-                  return <option key={index} value={s}>
-                    {s}
+              Object.entries(Shelf).map((kvp, index) => {
+                const [key, value] = kvp;
+
+                if (key !== Shelf.none) {
+                  return <option key={index} value={key}>
+                    {value}
                   </option>;
                 }
               })
@@ -39,7 +41,7 @@ const Book: React.FC<{
       <div className='book-title'>{book.title}</div>
       <div className='book-authors'>
         {
-          book.authors.map((a, index) =>
+          book.authors?.map((a, index) =>
             <span key={index}>{index === 0 ? a : ` & ${a}`}</span>
           )
         }

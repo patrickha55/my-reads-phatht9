@@ -1,7 +1,7 @@
 enum Shelf {
-    currentlyReading = 'currentlyReading',
-    wantToRead = 'wantToRead',
-    read = 'read',
+    currentlyReading = 'Currently Reading',
+    wantToRead = 'Want to Read',
+    read = 'Read',
     none = 'none'
 }
 

@@ -5,7 +5,7 @@ import Shelf from '../interfaces/Shelf';
 
 const Books: React.FC<{
   books: IBook[];
-  handleShelfChange: Function;
+  handleShelfChange: (book: IBook, shelf: Shelf) => void;
   shelf: Shelf;
 }> = ({
   books,
@@ -14,11 +14,9 @@ const Books: React.FC<{
 }) => {
     let result = <div>There is no book in this shelf :(</div>;
 
-    const filteredBooks = books.filter(
-      (book) => book.shelf === shelf
-    );
+    const filteredBooks = shelf !== Shelf.none ? books.filter(book => book.shelf === shelf) : books;
 
-    if (filteredBooks) {
+    if (filteredBooks && filteredBooks.length > 0) {
       result = (
         <div className='bookshelf-books'>
           <ol className='books-grid'>
