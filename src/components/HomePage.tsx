@@ -6,7 +6,7 @@ import Shelf from '../interfaces/Shelf';
 
 const HomePage: React.FC<{
   books: IBook[];
-  handleShelfChange: Function;
+  handleShelfChange: (book: IBook, shelf: Shelf) => void;
 }> = ({
   books,
   handleShelfChange
@@ -21,18 +21,20 @@ const HomePage: React.FC<{
           </div>
           <div className='list-books-content'>
             <div>
-              <div className='bookshelf'>
-                <h2 className='bookshelf-title'>Currently Reading</h2>
-                <Books books={books} handleShelfChange={handleShelfChange} shelf={Shelf.currentlyReading} />
-              </div>
-              <div className='bookshelf'>
-                <h2 className='bookshelf-title'>Want to Read</h2>
-                <Books books={books} handleShelfChange={handleShelfChange} shelf={Shelf.wantToRead} />
-              </div>
-              <div className='bookshelf'>
-                <h2 className='bookshelf-title'>Read</h2>
-                <Books books={books} handleShelfChange={handleShelfChange} shelf={Shelf.read} />
-              </div>
+              {
+                Object.entries(Shelf).map((kvp, index) => {
+                  const [key, value] = kvp;
+
+                  if (key !== Shelf.none) {
+                    return (
+                      <div key={index} className='bookshelf'>
+                        <h2 className='bookshelf-title'>{value}</h2>
+                        <Books books={books} handleShelfChange={handleShelfChange} shelf={key as Shelf} />
+                      </div>
+                    );
+                  }
+                })
+              }
             </div>
           </div>
           <div className='open-search'>
