@@ -16,7 +16,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    getAll().then(books => setBooks([...books]));
+    if (fetchBooks)
+      getAll().then(books => setBooks([...books]));
+
+    setFetchBooks(false);
   }, [fetchBooks]);
 
   /**
@@ -32,8 +35,14 @@ function App() {
         const result = await update(book, shelf);
 
         if (result) {
-          if (books.indexOf(book) === -1) {
-            console.log('Fetch book again');
+          const isExists: IBook | undefined = books.find(b => b.id === book.id);
+          console.log(isExists);
+          if (!isExists) {
+            console.log({
+              message: 'Fetch book again',
+              books,
+              index: isExists,
+            });
             setFetchBooks(true);
           } else {
             console.log('Just update state');
