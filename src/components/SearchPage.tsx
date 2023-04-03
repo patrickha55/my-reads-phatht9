@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IBook } from '../interfaces/IBook';
 import { search } from '../BookAPI';
@@ -10,31 +10,50 @@ const SearchPage: React.FC<{
 }> = ({
   handleShelfChange,
 }) => {
-    const [searchInput, setSearchInput] = useState('');
     const [searchedBooks, setSearchedBooks] = useState<IBook[]>([]);
+    const [isBookNotExist, setIsNotBookExist] = useState(false);
+    const timer = useRef<NodeJS.Timeout | null>(null);
 
     const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchInput(prev => e.target.value.trim());
-    };
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
 
-    useEffect(() => {
-      if (searchInput.length > 0) {
-        search(searchInput, '10').then(books => {
+      const query = e.target.value.trim();
+
+      if (query.length === 0) {
+        setSearchedBooks([]);
+        setIsNotBookExist(false);
+        return;
+      }
+
+      timer.current = setTimeout(() => {
+        setIsNotBookExist(false);
+        setSearchedBooks([]);
+
+        search(query, '20').then(books => {
           if (books && books.length > 0) {
             setSearchedBooks([...books]);
           }
+          else {
+            setIsNotBookExist(true);
+          }
         });
-      }
-      else {
-        setSearchedBooks([]);
-      }
-    }, [searchInput]);
-
-    const handleSearchShelfChange = (book: IBook, shelf: Shelf) => {
-      setSearchedBooks(prev => prev.map(b => ({ ...b, shelf: b.id === book.id ? shelf : b.shelf })));
-      handleShelfChange(book, shelf);
+      }, 500);
     };
 
+    /**
+     * Update the searchedBooks array as well as update the books in the main page
+     * @param book Book to be updated
+     * @param shelf Shelf used for updating the book
+     */
+    const handleSearchShelfChange = (book: IBook, shelf: Shelf): void => {
+      if (book && shelf !== Shelf.none) {
+        setSearchedBooks(prev => prev.map(b => ({ ...b, shelf: b.id === book.id ? shelf : b.shelf })));
+
+        handleShelfChange(book, shelf);
+      }
+    };
 
     return (
       <div className='search-books'>
@@ -46,7 +65,7 @@ const SearchPage: React.FC<{
             <input
               type='text'
               placeholder='Search by title, author, or ISBN'
-              onChange={(e) => handleSearchInput(e)}
+              onChange={handleSearchInput}
             />
           </div>
         </div>
@@ -57,7 +76,9 @@ const SearchPage: React.FC<{
                 <Books books={searchedBooks} handleShelfChange={handleSearchShelfChange} shelf={Shelf.none} />
               ) : (
                 <div className='no-books-found'>
-                  <h3>It's empty here :(</h3>
+                  <h3>
+                    {isBookNotExist ? 'No books found' : 'Please enter a search term'}
+                  </h3>
                 </div>
               )
             }

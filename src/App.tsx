@@ -21,6 +21,8 @@ function App() {
 
   /**
    * Manage the shelf type of a book.
+   * If the book is not in the main page, fetch the book again.
+   * Otherwise, just update the state.
    * @param book Book object
    * @param shelf Type of shelf
    */
