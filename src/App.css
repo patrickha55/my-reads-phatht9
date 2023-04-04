@@ -170,8 +170,25 @@ body,
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   background: #eee;
 }
+.book-cover:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
 .book-cover-title {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+.book-status {
+  border-top: rgb(155, 155, 155) 0.5px solid;
+  padding-top: 0.2em;
+  font-size: 0.7em;
+  color: #335e70;
+}
+
+.no-style-link {
+  text-decoration: none;
+  color: inherit;
 }

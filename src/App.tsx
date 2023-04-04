@@ -36,17 +36,16 @@ function App() {
 
         if (result) {
           const isExists: IBook | undefined = books.find(b => b.id === book.id);
-          console.log(isExists);
-          if (!isExists) {
-            console.log({
-              message: 'Fetch book again',
-              books,
-              index: isExists,
-            });
-            setFetchBooks(true);
+
+          if (isExists) {
+            setBooks(prev => prev.map(
+              b => ({
+                ...b,
+                shelf: b.id === book.id ? shelf : b.shelf
+              })
+            ));
           } else {
-            console.log('Just update state');
-            setBooks(prev => prev.map(b => ({ ...b, shelf: b.id === book.id ? shelf : b.shelf })));
+            setFetchBooks(true);
           }
         }
 
@@ -61,7 +60,7 @@ function App() {
     <div className='app'>
       <Routes>
         <Route path='/' element={<HomePage books={books} handleShelfChange={handleShelfChange} />} />
-        <Route path='/search' element={<SearchPage handleShelfChange={handleShelfChange} />} />
+        <Route path='/search' element={<SearchPage booksInShelf={books} handleShelfChange={handleShelfChange} />} />
         <Route path='*' element={<div>404 - Not Found</div>} />
       </Routes>
     </div>

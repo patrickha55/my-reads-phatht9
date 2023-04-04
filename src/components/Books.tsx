@@ -2,6 +2,7 @@ import React from 'react';
 import { IBook } from '../interfaces/IBook';
 import Book from './Book';
 import Shelf from '../interfaces/Shelf';
+import { useLocation } from 'react-router-dom';
 
 const Books: React.FC<{
   books: IBook[];
@@ -12,6 +13,8 @@ const Books: React.FC<{
   handleShelfChange,
   shelf
 }) => {
+    const location = useLocation();
+
     let result = <div>There is no book in this shelf :(</div>;
 
     const filteredBooks = shelf !== Shelf.none ? books.filter(book => book.shelf === shelf) : books;
@@ -21,10 +24,15 @@ const Books: React.FC<{
         <div className='bookshelf-books'>
           <ol className='books-grid'>
             {
-              filteredBooks.map((book) => (
-                <li key={book.id}>
-                  <Book book={book} handleShelfChange={handleShelfChange} />
-                </li>))
+              filteredBooks.map((book) => {
+                const isInTheSearchPage = location.pathname.includes('/search');
+                const isBookInShelf = book.shelf !== 'none' as Shelf;
+                return (
+                  <li key={book.id}>
+                    <Book bookInShelf={isInTheSearchPage && isBookInShelf} book={book} handleShelfChange={handleShelfChange} />
+                  </li>);
+              }
+              )
             }
           </ol>
         </div>

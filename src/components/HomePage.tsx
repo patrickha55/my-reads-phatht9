@@ -25,7 +25,7 @@ const HomePage: React.FC<{
                 Object.entries(Shelf).map((kvp, index) => {
                   const [key, value] = kvp;
 
-                  if (key !== Shelf.none) {
+                  if (value !== Shelf.none) {
                     return (
                       <div key={index} className='bookshelf'>
                         <h2 className='bookshelf-title'>{value}</h2>

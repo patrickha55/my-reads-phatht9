@@ -2,7 +2,7 @@ enum Shelf {
     currentlyReading = 'Currently Reading',
     wantToRead = 'Want to Read',
     read = 'Read',
-    none = 'none'
+    none = 'None'
 }
 
 export default Shelf;
