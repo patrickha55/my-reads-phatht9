@@ -1,4 +1,4 @@
-import { Book } from './interfaces/Book';
+import { IBook } from './interfaces/IBook';
 
 const api = "https://reactnd-books-api.udacity.com";
 
@@ -11,17 +11,17 @@ const headers = {
   Authorization: token,
 };
 
-export const get = (bookId: string): Promise<Book> =>
+export const get = (bookId: string): Promise<IBook> =>
   fetch(`${api}/books/${bookId}`, { headers })
     .then((res) => res.json())
     .then((data) => data.book);
 
-export const getAll = (): Promise<Book[]> =>
+export const getAll = (): Promise<IBook[]> =>
   fetch(`${api}/books`, { headers })
     .then((res) => res.json())
     .then((data) => data.books);
 
-export const update = (book: Book, shelf: string): Promise<void> =>
+export const update = (book: IBook, shelf: string): Promise<Response> =>
   fetch(`${api}/books/${book.id}`, {
     method: "PUT",
     headers: {
@@ -31,7 +31,7 @@ export const update = (book: Book, shelf: string): Promise<void> =>
     body: JSON.stringify({ shelf }),
   }).then((res) => res.json());
 
-export const search = (query: string, maxResults: string): Promise<Book[]> =>
+export const search = (query: string, maxResults: string): Promise<IBook[]> =>
   fetch(`${api}/search`, {
     method: "POST",
     headers: {
