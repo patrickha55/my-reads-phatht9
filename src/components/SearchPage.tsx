@@ -31,15 +31,15 @@ const SearchPage: React.FC<{
 
       const query = e.target.value.trim();
 
-      if (query.length === 0) {
-        setSearchedBooks([]);
-        setIsNotBookExist(false);
-        return;
-      }
 
       timer.current = setTimeout(() => {
         setIsNotBookExist(false);
-        setSearchedBooks([]);
+
+        if (query.length === 0) {
+          setSearchedBooks([]);
+          setIsNotBookExist(false);
+          return;
+        }
 
         search(query, '20').then(books => {
           if (books && books.length > 0) {
